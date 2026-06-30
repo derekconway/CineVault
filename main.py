@@ -111,7 +111,7 @@ class MovieApp:
     def refresh_table(self):
         """Fetches items from database and builds the visual list rows."""
         self.movie_table.delete(*self.movie_table.get_children())
-        conn = sqlite3.connect("movies.db")
+        conn = sqlite3.connect("movies_database.db")
         cursor = conn.cursor()
         cursor.execute("Select * FROM movies")
         rows = cursor.fetchall()
@@ -135,7 +135,7 @@ class MovieApp:
                 messagebox.showerror("Error", "Year must be a number.")
                 return
 
-        conn = sqlite3.connect("movies.db")
+        conn = sqlite3.connect("movies_database.db")
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO movies (title, director, year, genre) VALUES (?, ?, ?, ?)",
@@ -155,19 +155,19 @@ class MovieApp:
         if not selected_item:
             messagebox.showwarning("Selection Error", "Please select a movie row to delete.")
             return
+        
+        confirm = messagebox.askyesno("Confirm Delete", "Delete this movie?")
+        if not confirm:
+            return
 
         content = self.movie_table.item(selected_item)
         row_id = content["values"][0] # Extract DB ID
 
-        conn = sqlite3.connect("movies.db")
+        conn = sqlite3.connect("movies_database.db")
         cursor = conn.cursor()
         cursor.execute("DELETE FROM movies WHERE id = ?", (row_id,))
         conn.commit()
         conn.close()
-
-        confirm = messagebox.askyesno("Confirm Delete", "Delete this movie?")
-        if not confirm:
-            return
 
         self.refresh_table()
         self.clear_entries()
@@ -198,7 +198,7 @@ class MovieApp:
             return
 
         try:
-            conn = sqlite3.connect("movies.db")
+            conn = sqlite3.connect("movies_database.db")
             cursor = conn.cursor()
 
             cursor.execute("SELECT * FROM movies WHERE title LIKE ?", ('%' + self.var_title.get() + '%',))
