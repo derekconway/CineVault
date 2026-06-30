@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 import sqlite3
 
 
-from database import init_db
+from database import init_db, get_all_movies
 
 
 # =================================================
