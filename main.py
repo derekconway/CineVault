@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 import sqlite3
 
 
-from database import init_db, get_all_movies, add_movie_to_db, delete_movie_from_db, search_movies_by_title
+from database import init_db, get_all_movies, add_movie_to_db, delete_movie_from_db, search_movies_by_title, update_movie_in_db
 
 # =================================================
 # 2. GUI APPLICATION CLASS
@@ -54,6 +54,7 @@ class CineVaultApp:
         ttk.Button(btn_frame, text="Clear Form", command=self.clear_entries).grid(row=7, column=1, pady=4)
         ttk.Button(btn_frame, text="Search Database", command=self.search_database).grid(row=5, column=1, pady=4)
         ttk.Button(btn_frame, text="Reset Search", command=self.reset_search).grid(row=6, column=1, pady=4)
+        ttk.Button(btn_frame, text="Update Movie", command=self.update_movie).grid(row=7, column=0, pady=4)
 
         # --- Tabel Frame (Right Side) ---
         table_frame = ttk.Frame(self.root)
@@ -183,10 +184,41 @@ class CineVaultApp:
             messagebox.showerror("Error", "The movie is not in the database.")
             self.clear_entries()
 
-
     def reset_search(self):
         self.clear_entries()
         self.refresh_table()
+
+    def update_movie(self):
+        if not self.var_id_num.get():
+            messagebox.showwarning("Error", "Please select a movie to update.")
+            return
+        
+        if not self.var_title.get():
+            messagebox.showerror("Error", "The movie Title field is required.")
+            return
+        
+        year = self.var_year.get()
+
+        if year:
+            try:
+                year=int(year)
+            except ValueError:
+                messagebox.showerror("Error", "Year moust be a number.")
+                return
+            
+        update_movie_in_db(
+            self.var_id_num.get(),
+            self.var_title.get(),
+            self.var_director.get(),
+            year,
+            self.var_genre.get()
+        )
+
+        self.refresh_table()
+        self.clear_entries()
+        messagebox.showinfo("Success", "Movie update successfully!")
+        
+        
 
 
 # ===========================================

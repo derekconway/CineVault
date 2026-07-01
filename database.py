@@ -58,3 +58,17 @@ def search_movies_by_title(title):
     results = cursor.fetchall()
     conn.close()
     return results
+
+def update_movie_in_db(movie_id, title, director, year, genre):
+    """Updates an existing movie in the datsbase."""
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        UPDATE movies
+        SET title = ?, director = ?, year = ?, genre = ?
+          WHERE id = ?""",
+          (title, director, year, genre, movie_id,)
+          )
+    conn.commit()
+    conn.close()
