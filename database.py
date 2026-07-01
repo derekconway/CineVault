@@ -60,7 +60,7 @@ def search_movies_by_title(title):
     return results
 
 def update_movie_in_db(movie_id, title, director, year, genre):
-    """Updates an existing movie in the datsbase."""
+    """Updates an existing movie in the database."""
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
     

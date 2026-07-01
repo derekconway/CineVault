@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import sqlite3
 
 
 from database import init_db, get_all_movies, add_movie_to_db, delete_movie_from_db, search_movies_by_title, update_movie_in_db
@@ -203,7 +202,7 @@ class CineVaultApp:
             try:
                 year=int(year)
             except ValueError:
-                messagebox.showerror("Error", "Year moust be a number.")
+                messagebox.showerror("Error", "Year must be a number.")
                 return
             
         update_movie_in_db(
@@ -216,7 +215,7 @@ class CineVaultApp:
 
         self.refresh_table()
         self.clear_entries()
-        messagebox.showinfo("Success", "Movie update successfully!")
+        messagebox.showinfo("Success", "Movie updated successfully!")
         
         
 
