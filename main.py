@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 import sqlite3
 
 
-from database import init_db, get_all_movies, add_movie_to_db
+from database import init_db, get_all_movies, add_movie_to_db, delete_movie_from_db
 
 # =================================================
 # 2. GUI APPLICATION CLASS
@@ -134,18 +134,14 @@ class CineVaultApp:
             messagebox.showwarning("Selection Error", "Please select a movie row to delete.")
             return
         
+        content = self.movie_table.item(selected_item)
+        row_id = content["values"][0] # Extract DB ID
+        
         confirm = messagebox.askyesno("Confirm Delete", "Delete this movie?")
         if not confirm:
             return
 
-        content = self.movie_table.item(selected_item)
-        row_id = content["values"][0] # Extract DB ID
-
-        conn = sqlite3.connect("movies_database.db")
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM movies WHERE id = ?", (row_id,))
-        conn.commit()
-        conn.close()
+        delete_movie_from_db(row_id)
 
         self.refresh_table()
         self.clear_entries()

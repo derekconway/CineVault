@@ -40,3 +40,11 @@ def add_movie_to_db(title, director, year, genre):
     )
     conn.commit()
     conn.close()
+
+def delete_movie_from_db(movie_id):
+    """Deletes a movie from the database by ID."""
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM movies WHERE id = ?", (movie_id,))
+    conn.commit()
+    conn.close()
